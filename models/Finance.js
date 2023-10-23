@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Revenue = require('./Revenue');
 
-const FinancesSchema = new mongoose.Schema({
+const FinanceSchema = new mongoose.Schema({
   year: {
     type: Number,
     required: true,
@@ -18,7 +19,13 @@ const FinancesSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Revenue'
     }
+  ],
+  expenses: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Expense'
+    }
   ]
 });
 
-module.exports = mongoose.model('Finance', FinancesSchema);
+module.exports = mongoose.model('Finance', FinanceSchema);

@@ -1,4 +1,5 @@
 const Revenue = require('../models/Revenue');
+const Finance = require('../models/Finance');
 
 const getAllRevenue = async (req, res) => {
   const revenues = await Revenue.find({});
@@ -7,6 +8,11 @@ const getAllRevenue = async (req, res) => {
 
 const createRevenue = async (req, res) => {
   const revenue = await Revenue.create(req.body);
+
+  // Adding created revenue's _id to Finance.revenues
+  let finance = await Finance.findById(req.body.finance_id);
+  await Finance.findByIdAndUpdate(req.body.finance_id, { revenues: [...finance.revenues, revenue] });
+
   res.status(201).json({ revenue });
 };
 

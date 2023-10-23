@@ -1,13 +1,8 @@
-const Finance = require('../models/Finances');
+const Finance = require('../models/Finance');
 const Revenue = require('../models/Revenue');
 
 const getAllFinances = async (req, res) => {
-  let finances = await Finance.find({});
-
-  finances.map(async (finance) => {
-    let revenues = await Revenue.find({ finance_id: finance._id });
-    finance.revenues = revenues;
-  });
+  let finances = await Finance.find({}).populate('revenues').populate('expenses');
 
   res.status(200).json(finances);
 };
