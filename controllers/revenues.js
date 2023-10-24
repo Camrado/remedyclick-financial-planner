@@ -26,6 +26,7 @@ const createRevenue = async (req, res) => {
 const getRevenue = async (req, res, next) => {
   const { id: revenueID } = req.params;
 
+  // Checking if revenueID is valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(revenueID)) {
     return next(createRequestError(`incorrect ID for revenue: ${revenueID}`, 'incorrect_id', 404));
   }
@@ -42,6 +43,7 @@ const getRevenue = async (req, res, next) => {
 const updateRevenue = async (req, res, next) => {
   const { id: revenueID } = req.params;
 
+  // Checking if revenueID is valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(revenueID)) {
     return next(createRequestError(`incorrect ID for revenue: ${revenueID}`, 'incorrect_id', 404));
   }
@@ -61,6 +63,7 @@ const updateRevenue = async (req, res, next) => {
 const deleteRevenue = async (req, res, next) => {
   const { id: revenueID } = req.params;
 
+  // Checking if revenueID is valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(revenueID)) {
     return next(createRequestError(`incorrect ID for revenue: ${revenueID}`, 'incorrect_id', 404));
   }
