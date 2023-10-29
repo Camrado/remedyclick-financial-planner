@@ -6,7 +6,7 @@ const Expense = require('../models/Expense');
 const Finance = require('../models/Finance');
 
 // Errors
-const { createRequestError } = require('../errors/RequestError');
+const { BadRequestError } = require('../errors');
 
 const getAllExpenses = async (req, res) => {
   const expenses = await Expense.find({});
@@ -23,29 +23,29 @@ const createExpense = async (req, res) => {
   res.status(201).json(expense);
 };
 
-const getExpense = async (req, res, next) => {
+const getExpense = async (req, res) => {
   const { id: expenseID } = req.params;
 
   // Checking if expenseID is valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(expenseID)) {
-    return next(createRequestError(`invalid ID: ${expenseID}`, 'invalid_id', 404));
+    throw new BadRequestError(`invalid ID: ${expenseID}`, 'invalid_id', 400);
   }
 
   const expense = await Expense.findOne({ _id: expenseID });
 
   if (!expense) {
-    return next(createRequestError(`no expense with ID: ${expenseID}`, 'not-found', 404));
+    throw new BadRequestError(`no expense with ID: ${expenseID}`, 'not-found', 404);
   }
 
   res.status(200).json(expense);
 };
 
-const updateExpense = async (req, res, next) => {
+const updateExpense = async (req, res) => {
   const { id: expenseID } = req.params;
 
   // Checking if expenseID is valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(expenseID)) {
-    return next(createRequestError(`invalid ID: ${expenseID}`, 'invalid_id', 404));
+    throw new BadRequestError(`invalid ID: ${expenseID}`, 'invalid_id', 400);
   }
 
   const expense = await Expense.findByIdAndUpdate(expenseID, req.body, {
@@ -54,24 +54,24 @@ const updateExpense = async (req, res, next) => {
   });
 
   if (!expense) {
-    return next(createRequestError(`no expense with ID: ${expenseID}`, 'not-found', 404));
+    throw new BadRequestError(`no expense with ID: ${expenseID}`, 'not-found', 404);
   }
 
   res.status(200).json(expense);
 };
 
-const deleteExpense = async (req, res, next) => {
+const deleteExpense = async (req, res) => {
   const { id: expenseID } = req.params;
 
   // Checking if expenseID is valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(expenseID)) {
-    return next(createRequestError(`invalid ID: ${expenseID}`, 'invalid_id', 404));
+    throw new BadRequestError(`invalid ID: ${expenseID}`, 'invalid_id', 400);
   }
 
   const expense = await Expense.findByIdAndDelete(expenseID);
 
   if (!expense) {
-    return next(createRequestError(`no expense with ID: ${expenseID}`, 'not-found', 404));
+    throw new BadRequestError(`no expense with ID: ${expenseID}`, 'not-found', 404);
   }
 
   res.status(200).json(expense);

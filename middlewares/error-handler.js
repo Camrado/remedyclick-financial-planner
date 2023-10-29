@@ -1,7 +1,7 @@
-const { RequestError } = require('../errors/RequestError');
+const { BadRequestError } = require('../errors');
 
 const errorHandlerMiddleware = async (err, req, res, next) => {
-  if (err instanceof RequestError) {
+  if (err instanceof BadRequestError) {
     return res.status(err.statusCode).json({ msg: err.message, type: err.type });
   }
 

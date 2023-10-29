@@ -2,7 +2,7 @@
 const Finance = require('../models/Finance');
 
 // Errors
-const { createRequestError } = require('../errors/RequestError');
+const { BadRequestError } = require('../errors');
 
 // Modules
 const mongoose = require('mongoose');
@@ -18,18 +18,18 @@ const createFinance = async (req, res) => {
   res.status(201).json(finance);
 };
 
-const getFinance = async (req, res, next) => {
+const getFinance = async (req, res) => {
   const { id: financeID } = req.params;
 
   // Checking if financeID is valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(financeID)) {
-    return next(createRequestError(`invalid ID: ${financeID}`, 'invalid_id', 404));
+    throw new BadRequestError(`invalid ID: ${financeID}`, 'invalid_id', 400);
   }
 
   const finance = await Finance.findOne({ _id: financeID }).populate('revenues').populate('expenses');
 
   if (!finance) {
-    return next(createRequestError(`no finance with ID: ${financeID}`, 'not-found', 404));
+    throw new BadRequestError(`no finance with ID: ${financeID}`, 'not-found', 404);
   }
 
   res.status(200).json(finance);
